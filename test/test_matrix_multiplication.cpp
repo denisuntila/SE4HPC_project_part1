@@ -47,6 +47,37 @@ TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
     }
 }
 
+//random 
+
+TEST(MatrixMultiplicationTest, first_random_values){
+    std::random_device rd;  // Seed for the random number engine
+    std::mt19937 gen(rd()); // Mersenne Twister random number engine
+    std::uniform_int_distribution<> dis(-1000, 1000);
+    std::vector<std::vector<int>> A(10,std::vector<int>(10, 0));
+    std::vector<std::vector<int>> B(10,std::vector<int>(10, 0));
+    std::vector<std::vector<int>> C(10,std::vector<int>(10, 0));
+    
+
+    for(int i = 0; i <= 5; i++){
+        std::stringstream buffer;
+        std::streambuf *sbuf = std::cerr.rdbuf();
+        std::cerr.rdbuf(buffer.rdbuf());
+        for(int r = 0; r < 10; r++){
+            for(int c = 0; c < 10; c++){   
+                A[r][c] = dis(gen);
+                B[r][c] = dis(gen);
+            }
+        }
+
+        multiplyMatrices(A, B, C,10, 10, 10);
+        std::cerr.rdbuf(sbuf);
+        std::cout << buffer.str()<<std::endl;
+        std::vector<std::vector<int>> expected(10, std::vector<int>(10, 0));
+        multiplyMatricesWithoutErrors(A, B, expected, 10, 10, 10);
+        EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
+    }
+}
+
 
 
 
@@ -117,6 +148,38 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
         EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
         EXPECT_EQ(C2, expected2) << "Matrix multiplication test failed! :(((()";
     }
+}
+
+//invalid_input
+
+TEST(MatrixMultiplicationTest, invalid){
+    std::vector<std::vector<int>> C(4,std::vector<int>(4, 0));
+    
+
+   
+        std::stringstream buffer;
+        std::streambuf *sbuf = std::cerr.rdbuf();
+        std::cerr.rdbuf(buffer.rdbuf());
+         std::vector<std::vector<int>> A = {
+            {1, 0, 0, 0},
+            {0, 1, 0, 0},
+            {0, 0, 1, 0},
+            {0, 0, 0, 1},
+         };
+        
+         std::vector<std::vector<int>> B = {
+            {'a', 0, 0, 0},
+            {0, 'b', 0, 0},
+            {0, 0, 'c', 0},
+            {0, 0, 0, 'd'},
+         };
+           
+        multiplyMatrices(A, B, C, 4, 4, 4);
+        std::cerr.rdbuf(sbuf);
+        std::cout << buffer.str()<<std::endl;
+        //std::vector<std::vector<int>> expected(5, std::vector<int>(5, 0));
+        // multiplyMatricesWithoutErrors(A, B, expected, 10, 10, 10);
+        EXPECT_EQ(C, B) << "Matrix multiplication test failed! :(((()";
 }
 
 /*TEST(MatrixMultiplicationTest, TestInvalidInputs){
