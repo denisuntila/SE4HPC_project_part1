@@ -51,6 +51,7 @@ TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
 
 
 TEST(MatrixMultiplicationTest, TestUnitaryMatrices){
+    /*Test with unitary matrices*/
     std::vector<std::vector<int>> A1(1,std::vector<int>(1, 0));
     std::vector<std::vector<int>> B1(1,std::vector<int>(1, 0));
     std::vector<std::vector<int>> C1(1,std::vector<int>(1, 0));
@@ -82,6 +83,8 @@ TEST(MatrixMultiplicationTest, TestUnitaryMatrices){
 }
 
 TEST(MatrixMultiplicationTest, TestRectangularMatrices){
+    /*Test with different dimensions of the 2 matrices to see
+      if rectangular matrices give errors.*/
     std::random_device rd;  // Seed for the random number engine
     std::mt19937 gen(rd()); // Mersenne Twister random number engine
     std::uniform_int_distribution<> dis(-1000, 1000);
@@ -118,7 +121,7 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
 
 /*TEST(MatrixMultiplicationTest, TestInvalidInputs){
     /* Test for invalid dimensions: it should give an error for 
-       non-matching dimensions*/
+       non-matching dimensions instead it does segmentation fault.*/
     /*std::vector<std::vector<int>> A(4,std::vector<int>(4, 0));
     std::vector<std::vector<int>> B(2,std::vector<int>(4, 0));
     std::vector<std::vector<int>> C(4,std::vector<int>(4, 0));
@@ -135,7 +138,8 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
 }*/
 
 TEST(MatrixMultiplicationTest, TestMaxDimensionsMatrices){
-    /*Test to check if over a certain dimension there are errors*/
+    /*Test to check if over a certain dimension there are errors. 
+      If you try a 1000x1000 matrix it gets stuck and it takes too much time. */
     std::vector<std::vector<int>> A(200,std::vector<int>(200, 0));
     std::vector<std::vector<int>> C(200,std::vector<int>(200, 0));
 
@@ -153,7 +157,9 @@ TEST(MatrixMultiplicationTest, TestMaxDimensionsMatrices){
 }
 
 TEST(MatrixMultiplicationTest, TestOutputMatrices){
-    /*Test to see valid inputs*/
+    /*Test to see valid inputs: try to see if inputs in a range
+      between 0 and 10000 give errors. We don't try negative numbers
+      since we already saw that they generate a problem.*/
     std::vector<std::vector<int>> A(100,std::vector<int>(100, 0));
     std::vector<std::vector<int>> B(100,std::vector<int>(100, 0));
     std::vector<std::vector<int>> C(100,std::vector<int>(100, 0));
