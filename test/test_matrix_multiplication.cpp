@@ -115,32 +115,66 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
         EXPECT_EQ(C2, expected2) << "Matrix multiplication test failed! :(((()";
     }
 }
-/*
-TEST(MatrixMultiplicationTest, TestOutputMatrices){
-    std::vector<std::vector<int>> A(10,std::vector<int>(10, 0));
-    std::vector<std::vector<int>> B(10,std::vector<int>(10, 0));
-    std::vector<std::vector<int>> C(10,std::vector<int>(10, 0));
-    std::vector<std::vector<int>> expected(10,std::vector<int>(10, 0));
-    int count =0;
+
+/*TEST(MatrixMultiplicationTest, TestInvalidInputs){
+    /* Test for invalid dimensions: it should give an error for 
+       non-matching dimensions*/
+    /*std::vector<std::vector<int>> A(4,std::vector<int>(4, 0));
+    std::vector<std::vector<int>> B(2,std::vector<int>(4, 0));
+    std::vector<std::vector<int>> C(4,std::vector<int>(4, 0));
 
     std::stringstream buffer;
     std::streambuf *sbuf = std::cerr.rdbuf();
     std::cerr.rdbuf(buffer.rdbuf());
 
-    for(int i=0; i < 10 ; i++){
-            A[i][i]=1;
-       
+    // Invalid dimensions
+    A = {{1, 2, 3, 4},{5, 6, 7, 8},{9, 10, 11, 12},{13, 14, 15, 16}};
+    B = {{1, 2, 3, 4},{5, 6, 7, 8}};
+    multiplyMatrices(A, B, C, 4, 4, 4);
+
+}*/
+
+TEST(MatrixMultiplicationTest, TestMaxDimensionsMatrices){
+    /*Test to check if over a certain dimension there are errors*/
+    std::vector<std::vector<int>> A(200,std::vector<int>(200, 0));
+    std::vector<std::vector<int>> C(200,std::vector<int>(200, 0));
+
+    std::stringstream buffer;
+    std::streambuf *sbuf = std::cerr.rdbuf();
+    std::cerr.rdbuf(buffer.rdbuf());
+
+    for(int i=0; i < 200 ; i++){
+        A[i][i]=1;  
+    }
+    multiplyMatrices(A, A, C, 200, 200, 200);
+    std::cerr.rdbuf(sbuf);
+    std::cout << buffer.str()<<std::endl;
+    EXPECT_EQ(C, A) << "Matrix multiplication test failed! :(((()";
+}
+
+TEST(MatrixMultiplicationTest, TestOutputMatrices){
+    /*Test to see valid inputs*/
+    std::vector<std::vector<int>> A(100,std::vector<int>(100, 0));
+    std::vector<std::vector<int>> B(100,std::vector<int>(100, 0));
+    std::vector<std::vector<int>> C(100,std::vector<int>(100, 0));
+    int count = 0;
+
+    std::stringstream buffer;
+    std::streambuf *sbuf = std::cerr.rdbuf();
+    std::cerr.rdbuf(buffer.rdbuf());
+
+    for(int i=0; i < 100 ; i++){
+        A[i][i]=1;     
         for(int j=0;j<10;j++){
             B[i][j] = count;
             count++;
         }
     }
-    multiplyMatrices(A, B, C, 10, 10, 10);
+    multiplyMatrices(A, B, C, 100, 100, 100);
     std::cerr.rdbuf(sbuf);
     std::cout << buffer.str()<<std::endl;
-    multiplyMatricesWithoutErrors(A, B, expected, 10, 10, 10);
-    EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
-}*/
+    EXPECT_EQ(C, B) << "Matrix multiplication test failed! :(((()";
+}
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
