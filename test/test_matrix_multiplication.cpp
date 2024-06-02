@@ -80,6 +80,7 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
         std::vector<std::vector<int>> A(3,std::vector<int>(i, 0));
         std::vector<std::vector<int>> B(i,std::vector<int>(3, 0));
         std::vector<std::vector<int>> C(3,std::vector<int>(3, 0));
+        std::vector<std::vector<int>> C2(i,std::vector<int>(i, 0));
         //std:: cout << A.size() << " "<< B.size()<<std::endl;
 
         for(int r = 0; r < 3; r++){
@@ -90,11 +91,15 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
         }
 
         multiplyMatrices(A, B, C, 3, i, 3);
+        multiplyMatrices(B, A, C2, i, 3, i);
         std::cerr.rdbuf(sbuf);
         std::cout << buffer.str()<<std::endl;
         std::vector<std::vector<int>> expected(3, std::vector<int>(3, 0));
+        std::vector<std::vector<int>> expected2(i, std::vector<int>(i, 0));
         multiplyMatricesWithoutErrors(A, B, expected, 3, i, 3);
+        multiplyMatricesWithoutErrors(B, A, expected2, i, 3, i);
         EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
+        EXPECT_EQ(C2, expected2) << "Matrix multiplication test failed! :(((()";
     }
 }
 
@@ -122,36 +127,6 @@ TEST(MatrixMultiplicationTest, TestOutputMatrices){
     std::cout << buffer.str()<<std::endl;
     multiplyMatricesWithoutErrors(A, B, expected, 10, 10, 10);
     EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
-}
-
-TEST(MatrixMultiplicationTest, TestRectangularMatrices2){
-    std::random_device rd;  // Seed for the random number engine
-    std::mt19937 gen(rd()); // Mersenne Twister random number engine
-    std::uniform_int_distribution<> dis(-15, 15);
-
-    for(int i = 1; i <= 5; i++){
-        std::stringstream buffer;
-        std::streambuf *sbuf = std::cerr.rdbuf();
-        std::cerr.rdbuf(buffer.rdbuf());
-        std::vector<std::vector<int>> A(i,std::vector<int>(3, 0));
-        std::vector<std::vector<int>> B(3,std::vector<int>(i, 0));
-        std::vector<std::vector<int>> C(i,std::vector<int>(i, 0));
-        //std:: cout << A.size() << " "<< B.size()<<std::endl;
-
-        for(int r = 0; r < i; r++){
-            for(int c = 0; c < 3; c++){   
-                A[r][c] = dis(gen);
-                B[c][r] = dis(gen);
-            }
-        }
-
-        multiplyMatrices(A, B, C, i, 3, i);
-        std::cerr.rdbuf(sbuf);
-        std::cout << buffer.str()<<std::endl;
-        std::vector<std::vector<int>> expected(i, std::vector<int>(i, 0));
-        multiplyMatricesWithoutErrors(A, B, expected, i, 3, i);
-        EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
-    }
 }
 
 int main(int argc, char **argv) {
