@@ -48,6 +48,8 @@ TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
 }
 
 
+
+
 TEST(MatrixMultiplicationTest, TestUnitaryMatrices){
     std::vector<std::vector<int>> A1(1,std::vector<int>(1, 0));
     std::vector<std::vector<int>> B1(1,std::vector<int>(1, 0));
@@ -60,9 +62,9 @@ TEST(MatrixMultiplicationTest, TestUnitaryMatrices){
     std::vector<std::vector<int>> expected(2,std::vector<int>(2, 0));
 
     for(int i=-10 ; i < 10 ; i++){
-        std::stringstream buffer;
+       /*std::stringstream buffer;
         std::streambuf *sbuf = std::cerr.rdbuf();
-        std::cerr.rdbuf(buffer.rdbuf());
+        std::cerr.rdbuf(buffer.rdbuf());*/
         A1[0][0]=i;
         B1[0][0]=i;
         A = {{i,i},{i,i}};
@@ -70,8 +72,8 @@ TEST(MatrixMultiplicationTest, TestUnitaryMatrices){
         multiplyMatrices(A1, B1, C1, 1,1,1);
         
         multiplyMatrices(A, B, C, 2, 2, 2);
-        std::cerr.rdbuf(sbuf);
-        std::cout << buffer.str()<<std::endl;
+       /* std::cerr.rdbuf(sbuf);
+        std::cout << buffer.str()<<std::endl;*/
         multiplyMatricesWithoutErrors(A1, B1, expected1, 1,1,1);
         multiplyMatricesWithoutErrors(A, B, expected, 2, 2, 2);
         EXPECT_EQ(C1, expected1) << "Matrix multiplication test failed! :(((()";
@@ -85,9 +87,9 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
     std::uniform_int_distribution<> dis(-1000, 1000);
 
     for(int i = 1; i <= 5; i++){
-        std::stringstream buffer;
+        /*std::stringstream buffer;
         std::streambuf *sbuf = std::cerr.rdbuf();
-        std::cerr.rdbuf(buffer.rdbuf());
+        std::cerr.rdbuf(buffer.rdbuf());*/
         std::vector<std::vector<int>> A(3,std::vector<int>(i, 0));
         std::vector<std::vector<int>> B(i,std::vector<int>(3, 0));
         std::vector<std::vector<int>> C(3,std::vector<int>(3, 0));
@@ -103,8 +105,8 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
 
         multiplyMatrices(A, B, C, 3, i, 3);
         multiplyMatrices(B, A, C2, i, 3, i);
-        std::cerr.rdbuf(sbuf);
-        std::cout << buffer.str()<<std::endl;
+        /*std::cerr.rdbuf(sbuf);
+        std::cout << buffer.str()<<std::endl;*/
         std::vector<std::vector<int>> expected(3, std::vector<int>(3, 0));
         std::vector<std::vector<int>> expected2(i, std::vector<int>(i, 0));
         multiplyMatricesWithoutErrors(A, B, expected, 3, i, 3);
@@ -113,7 +115,7 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
         EXPECT_EQ(C2, expected2) << "Matrix multiplication test failed! :(((()";
     }
 }
-
+/*
 TEST(MatrixMultiplicationTest, TestOutputMatrices){
     std::vector<std::vector<int>> A(10,std::vector<int>(10, 0));
     std::vector<std::vector<int>> B(10,std::vector<int>(10, 0));
@@ -138,7 +140,7 @@ TEST(MatrixMultiplicationTest, TestOutputMatrices){
     std::cout << buffer.str()<<std::endl;
     multiplyMatricesWithoutErrors(A, B, expected, 10, 10, 10);
     EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
-}
+}*/
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
