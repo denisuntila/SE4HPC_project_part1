@@ -8,32 +8,43 @@
 // ######################### Source code of multiplyMatrices in src/matrix_mult
 
 
-
+//error n° 17 is probably not deterministic 
 TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
-    std::vector<std::vector<int>> expected(3,std::vector<int>(2, 0));
+    for(int i =0; i< 20; i++){
+    std::vector<std::vector<int>> expected(7,std::vector<int>(2, 0));
     std::vector<std::vector<int>> A = {
-        {0, 1, 2, 0 },
-        {0, 0, 1, 2},
-        {3, 0, 1, 0}
+        {1, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 0, 0, 0, 0, 0},
+        {0, 0, 0, 1, 0, 0, 0, 0},
+        {0, 0, 0, 0, 1, 0, 0, 0},
+        {0, 0, 0, 0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0, 0, 1, 0},
     };
     std::vector<std::vector<int>> B = {
-        {2, 8},
-        {3, 8},
-        {5, 1},
-        {2, 1}
+        {13, 13},
+        {13, 13},
+        {12, 13},
+        {13, 13},
+        {13, 13},
+        {13, 13},
+        {13, 13},
+        {13, 13},
+        
     };
-    std::vector<std::vector<int>> C(3, std::vector<int>(2, 0));
+    std::vector<std::vector<int>> C(7, std::vector<int>(2, 0));
 
-    multiplyMatrices(A, B, C, 3, 4, 2);
+    multiplyMatrices(A, B, C, 7, 7, 2);
 
     /*std::vector<std::vector<int>> expected = {
         {58, 64},
         {139, 154}
     };*/
 
-    multiplyMatricesWithoutErrors(A, B, expected, 3,4,2);
+    multiplyMatricesWithoutErrors(A, B, expected, 7,7,2);
 
-    ASSERT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
+    EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
+    }
 }
 
 
