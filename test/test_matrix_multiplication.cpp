@@ -218,7 +218,6 @@ After the modification of the result matrix, we no longer have a 17 in the C mat
 After some attempts, we probably understand how error 7 impacts the C matrix, and so we managed to create a specific test for error 17. 
 Basically, if i have the number 13 in the C matrix, I get error 7, and this error adds 4 to my entry so that I obtain a 17 in the output matrix and finally get error 17
 However, if we try to run this test in a for loop, we see that sometimes I just get error 7 without error 17, so we don't know if maybe it's not deterministic or if we don't understand the pattern.
-
 */
 
 //error n° 17 is probably not deterministic 
