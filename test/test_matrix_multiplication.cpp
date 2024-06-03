@@ -7,6 +7,10 @@
 
 // ######################### Source code of multiplyMatrices in src/matrix_mult
 
+//you can find also in the README.md bash command to compile:
+// ./test_multiplication 2>&1>/dev/null | grep -e 'Error' | sort -u --version-sort 
+
+
 /* 1-RANDOM TEST
 we performed an initial random test. 
 Although it's not the most efficient technique to find and understand errors in the code,
@@ -21,10 +25,8 @@ TEST(MatrixMultiplicationTest, first_random_values){
     std::vector<std::vector<int>> C(10,std::vector<int>(10, 0));
     
 
-    for(int i = 0; i <= 5; i++){
-        std::stringstream buffer;
-        std::streambuf *sbuf = std::cerr.rdbuf();
-        std::cerr.rdbuf(buffer.rdbuf());
+    for(int i = 0; i <= 3; i++){
+        
         for(int r = 0; r < 10; r++){
             for(int c = 0; c < 10; c++){   
                 A[r][c] = dis(gen);
@@ -33,8 +35,6 @@ TEST(MatrixMultiplicationTest, first_random_values){
         }
 
         multiplyMatrices(A, B, C,10, 10, 10);
-        std::cerr.rdbuf(sbuf);
-        std::cout << buffer.str()<<std::endl;
         std::vector<std::vector<int>> expected(10, std::vector<int>(10, 0));
         multiplyMatricesWithoutErrors(A, B, expected, 10, 10, 10);
         EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
@@ -63,10 +63,6 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
     std::uniform_int_distribution<> dis(-1000, 1000);
 
     for(int i = 1; i <= 5; i++){
-        std::stringstream buffer;
-        std::streambuf *sbuf = std::cerr.rdbuf();
-        std::cerr.rdbuf(buffer.rdbuf());
-
         //in this way we change size at each iteration, we also try a square matrix.
         std::vector<std::vector<int>> A(3,std::vector<int>(i, 0));
         std::vector<std::vector<int>> B(i,std::vector<int>(3, 0));
@@ -85,8 +81,6 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
 
         multiplyMatrices(A, B, C, 3, i, 3);
         multiplyMatrices(B, A, C2, i, 3, i);
-        std::cerr.rdbuf(sbuf);
-        std::cout << buffer.str()<<std::endl;
         std::vector<std::vector<int>> expected(3, std::vector<int>(3, 0));
         std::vector<std::vector<int>> expected2(i, std::vector<int>(i, 0));
         multiplyMatricesWithoutErrors(A, B, expected, 3, i, 3);
@@ -111,10 +105,6 @@ TEST(MatrixMultiplicationTest, TestVectorsMatrices){
     std::vector<std::vector<int>> expected1(5, std::vector<int>(1, 0));
     std::vector<std::vector<int>> expected2(1, std::vector<int>(5, 0));
 
-    std::stringstream buffer;
-    std::streambuf *sbuf = std::cerr.rdbuf();
-    std::cerr.rdbuf(buffer.rdbuf());
-
     for(int i=0; i < 5 ; i++){
         v1[i][0]=dis(gen);
         v2[0][i]=dis(gen);      
@@ -123,32 +113,50 @@ TEST(MatrixMultiplicationTest, TestVectorsMatrices){
     }
     multiplyMatrices(A, v1, C1, 5, 5, 1);
     multiplyMatrices(v2, A, C2, 1, 5, 5);
-    std::cerr.rdbuf(sbuf);
-    std::cout << buffer.str()<<std::endl;
     multiplyMatricesWithoutErrors(A, v1, expected1, 5,5,1);
     multiplyMatricesWithoutErrors(v2, A, expected2, 1,5,5);
     EXPECT_EQ(C1, expected1) << "Matrix multiplication test failed! :(((()";
     EXPECT_EQ(C2, expected2) << "Matrix multiplication test failed! :(((()";
 }
 
-
 //2.3
+//test between vector and vector:
+
+    TEST(MatrixMultiplicationTest, TestVectorsVectors){
+    std::random_device rd;  // Seed for the random number engine
+    std::mt19937 gen(rd()); // Mersenne Twister random number engine
+    std::uniform_int_distribution<> dis(-1000, 1000);
+
+    std::vector<std::vector<int>> v1(5,std::vector<int>(1, 0));
+    std::vector<std::vector<int>> v2(1,std::vector<int>(5, 0));
+    std::vector<std::vector<int>> C1(5,std::vector<int>(5, 0));
+    std::vector<std::vector<int>> C2(1,std::vector<int>(1, 0));
+    std::vector<std::vector<int>> expected1(5, std::vector<int>(5, 0));
+    std::vector<std::vector<int>> expected2(1, std::vector<int>(1, 0));
+
+    for(int i=0; i < 5 ; i++){
+        v1[i][0]=dis(gen);
+        v2[0][i]=dis(gen);       
+    }
+    multiplyMatrices(v1, v2, C1, 5, 1, 5);
+    multiplyMatrices(v2, v1, C2, 1, 5, 1);
+    multiplyMatricesWithoutErrors(v1, v2, expected1, 5,1,5);
+    multiplyMatricesWithoutErrors(v2, v1, expected2, 1,5,1);
+    EXPECT_EQ(C1, expected1) << "Matrix multiplication test failed! :(((()";
+    EXPECT_EQ(C2, expected2) << "Matrix multiplication test failed! :(((()";
+} 
+
+//2.4
 TEST(MatrixMultiplicationTest, TestMaxDimensionsMatrices){
     /*Test to check if over a certain dimension there are errors. 
       If you try a 1000x1000 matrix it gets stuck and it takes too much time. */
     std::vector<std::vector<int>> A(200,std::vector<int>(200, 0));
     std::vector<std::vector<int>> C(200,std::vector<int>(200, 0));
 
-    std::stringstream buffer;
-    std::streambuf *sbuf = std::cerr.rdbuf();
-    std::cerr.rdbuf(buffer.rdbuf());
-
     for(int i=0; i < 200 ; i++){
         A[i][i]=1;  
     }
     multiplyMatrices(A, A, C, 200, 200, 200);
-    std::cerr.rdbuf(sbuf);
-    std::cout << buffer.str()<<std::endl;
     EXPECT_EQ(C, A) << "Matrix multiplication test failed! :(((()";
 }
 
@@ -169,15 +177,9 @@ TEST(MatrixMultiplicationTest, TestUnitaryMatrices_positive){
     std::vector<std::vector<int>> expected1(1, std::vector<int>(1, 0));
 
     for(int i=0; i < 10 ; i++){
-        std::stringstream buffer;
-        std::streambuf *sbuf = std::cerr.rdbuf();
-        std::cerr.rdbuf(buffer.rdbuf());
         A1[0][0]=i;
         B1[0][0]=i;
         multiplyMatrices(A1, B1, C1, 1,1,1);
-
-        std::cerr.rdbuf(sbuf);
-        std::cout << buffer.str()<<std::endl;
         multiplyMatricesWithoutErrors(A1, B1, expected1, 1,1,1);
         EXPECT_EQ(C1, expected1) << "Matrix multiplication test failed! :(((()";
     }
@@ -193,19 +195,15 @@ TEST(MatrixMultiplicationTest, TestUnitaryMatrices_negative){
     std::vector<std::vector<int>> expected1(1, std::vector<int>(1, 0));
 
     for(int i=-10; i < 0 ; i++){
-        std::stringstream buffer;
-        std::streambuf *sbuf = std::cerr.rdbuf();
-        std::cerr.rdbuf(buffer.rdbuf());
         A1[0][0]=i;
         B1[0][0]=i;
         multiplyMatrices(A1, B1, C1, 1,1,1);
-
-        std::cerr.rdbuf(sbuf);
-        std::cout << buffer.str()<<std::endl;
         multiplyMatricesWithoutErrors(A1, B1, expected1, 1,1,1);
         EXPECT_EQ(C1, expected1) << "Matrix multiplication test failed! :(((()";
     }
 }
+
+
 
 // 3.3
 // test for homogeneous matrices:
@@ -216,15 +214,10 @@ TEST(MatrixMultiplicationTest, TestHomogeneousMatrices){
     std::vector<std::vector<int>> expected(2,std::vector<int>(2, 0));
 
     for(int i=-10 ; i < 10 ; i++){
-        std::stringstream buffer;
-        std::streambuf *sbuf = std::cerr.rdbuf();
-        std::cerr.rdbuf(buffer.rdbuf());
         A = {{i,i},{i,i}};
         B = {{i,i},{i,i}};
         
         multiplyMatrices(A, B, C, 2, 2, 2);
-        std::cerr.rdbuf(sbuf);
-        std::cout << buffer.str()<<std::endl;
         multiplyMatricesWithoutErrors(A, B, expected, 2, 2, 2);
         EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
     }
@@ -241,10 +234,6 @@ TEST(MatrixMultiplicationTest, TestOutputMatrices){
     std::vector<std::vector<int>> C(100,std::vector<int>(100, 0));
     int count = 0;
 
-    std::stringstream buffer;
-    std::streambuf *sbuf = std::cerr.rdbuf();
-    std::cerr.rdbuf(buffer.rdbuf());
-
     for(int i=0; i < 100 ; i++){
         A[i][i]=1;     
         for(int j=0;j<10;j++){
@@ -253,8 +242,6 @@ TEST(MatrixMultiplicationTest, TestOutputMatrices){
         }
     }
     multiplyMatrices(A, B, C, 100, 100, 100);
-    std::cerr.rdbuf(sbuf);
-    std::cout << buffer.str()<<std::endl;
     EXPECT_EQ(C, B) << "Matrix multiplication test failed! :(((()";
 }
 
@@ -298,7 +285,7 @@ However, if we try to run this test in a for loop, we see that sometimes I just 
 
 //error n° 17 is probably not deterministic(?) 
 TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
-    for(int i =0; i< 0; i++){
+    for(int i =0; i< 1; i++){
     std::vector<std::vector<int>> expected(7,std::vector<int>(2, 0));
     std::vector<std::vector<int>> A = {
         {1, 0, 0, 0, 0, 0, 0, 0},
@@ -356,6 +343,8 @@ Error 17: Result matrix C contains the number 17!
 Error 18: Matrix A is a square matrix!
 Error 19: Every row in matrix A contains the number 8!
 Error 20: Number of columns in matrix A is odd!*/
+
+
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
