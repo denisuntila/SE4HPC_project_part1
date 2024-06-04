@@ -254,7 +254,7 @@ TEST(MatrixMultiplicationTest, TestOutputMatrices){
 /*we made some tests about possible invalid inputs 
 such as  dimensional incompatibilities between A and B:
 In this test occurs segmentation fault,
- so must be decommented only when necessary*/
+so must be decommented only when necessary*/
 
 /*TEST(MatrixMultiplicationTest, TestInvalidInputs){
     /* Test for invalid dimensions: it should give an error for 
