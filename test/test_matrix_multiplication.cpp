@@ -7,14 +7,16 @@
 
 // ######################### Source code of multiplyMatrices in src/matrix_mult
 
-//you can find also in the README.md bash command to compile:
-// ./test_multiplication 2>&1>/dev/null | grep -e 'Error' | sort -u --version-sort 
+//you can find also in the README.md bash command to compile: 
+//./test_multiplication 2>&1>/dev/null | grep -e 'Error' | sort -u --version-sort 
 
 
-/* 1-RANDOM TEST
+/*1-RANDOM TEST
 we performed an initial random test. 
-Although it's not the most efficient technique to find and understand errors in the code,
-it was initially very useful for us to see some errors and understand how to proceed with a more structured analysis*/
+Although it's not the most efficient technique
+to find and understand errors in the code,
+it was initially very useful for us to see some errors
+and understand how to proceed with a more structured analysis*/
 
 TEST(MatrixMultiplicationTest, first_random_values){
     std::random_device rd;  // Seed for the random number engine
@@ -49,27 +51,30 @@ Error 12: The number of rows in A is equal to the number of columns in B!
 Error 14: The result matrix C has an even number of rows!
 Error 18: Matrix A is a square matrix!
 
-These errors are mainly related to matrix's dimensions or to the values within the three matrices. 
+These errors are mainly related to matrix's dimensions 
+or to the values within the three matrices. 
 So all next tests will consider these issues. 
 */
 
+//--------------------------------------------------------------------------------------------------
+
 //2-TEST ABOUT SIZE'S ERRORS:
-//2.1
+//2.1 test with rectangular matrices
 TEST(MatrixMultiplicationTest, TestRectangularMatrices){
-    /*Test with different dimensions of the 2 matrices to see
-      if rectangular matrices give errors.*/
+    //Test with different dimensions of the 2 matrices to see
+    //if rectangular matrices give errors.
     std::random_device rd;  // Seed for the random number engine
     std::mt19937 gen(rd()); // Mersenne Twister random number engine
     std::uniform_int_distribution<> dis(-1000, 1000);
 
     for(int i = 1; i <= 5; i++){
-        //in this way we change size at each iteration, we also try a square matrix.
+        //in this way we change size at each iteration,
+        // we also try a square matrix.
         std::vector<std::vector<int>> A(3,std::vector<int>(i, 0));
         std::vector<std::vector<int>> B(i,std::vector<int>(3, 0));
         std::vector<std::vector<int>> C(3,std::vector<int>(3, 0));
         std::vector<std::vector<int>> C2(i,std::vector<int>(i, 0));
-        //std:: cout << A.size() << " "<< B.size()<<std::endl;
-
+        
         for(int r = 0; r < 3; r++){
             for(int c = 0; c < i; c++){   
                 A[r][c] = dis(gen);
@@ -77,7 +82,8 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
             }
         }
 
-        /*we try both with the product A*B and also B*A, in order to catch more size errors */
+        //we try both with the product A*B and also B*A,
+        // in order to catch more size errors 
 
         multiplyMatrices(A, B, C, 3, i, 3);
         multiplyMatrices(B, A, C2, i, 3, i);
@@ -90,8 +96,7 @@ TEST(MatrixMultiplicationTest, TestRectangularMatrices){
     }
 }
 
-//2.2
-/* Test with vectors both in the first and the second position */
+/*2.2 Test with vectors both in the first and the second position */
 TEST(MatrixMultiplicationTest, TestVectorsMatrices){
     std::random_device rd;  // Seed for the random number engine
     std::mt19937 gen(rd()); // Mersenne Twister random number engine
@@ -119,10 +124,8 @@ TEST(MatrixMultiplicationTest, TestVectorsMatrices){
     EXPECT_EQ(C2, expected2) << "Matrix multiplication test failed! :(((()";
 }
 
-//2.3
-//test between vector and vector:
-
-    TEST(MatrixMultiplicationTest, TestVectorsVectors){
+//2.3 test between vector and vector:
+TEST(MatrixMultiplicationTest, TestVectorsVectors){
     std::random_device rd;  // Seed for the random number engine
     std::mt19937 gen(rd()); // Mersenne Twister random number engine
     std::uniform_int_distribution<> dis(-1000, 1000);
@@ -146,10 +149,10 @@ TEST(MatrixMultiplicationTest, TestVectorsMatrices){
     EXPECT_EQ(C2, expected2) << "Matrix multiplication test failed! :(((()";
 } 
 
-//2.4
+//2.4 test about max size
 TEST(MatrixMultiplicationTest, TestMaxDimensionsMatrices){
-    /*Test to check if over a certain dimension there are errors. 
-      If you try a 1000x1000 matrix it gets stuck and it takes too much time. */
+    //Test to check if over a certain dimension there are errors. 
+    //If you try a 1000x1000 matrix it gets stuck and it takes too much time. 
     std::vector<std::vector<int>> A(200,std::vector<int>(200, 0));
     std::vector<std::vector<int>> C(200,std::vector<int>(200, 0));
 
@@ -164,13 +167,16 @@ TEST(MatrixMultiplicationTest, TestMaxDimensionsMatrices){
 
 
 //3-TEST ABOUT VALUES ERRORS:
-//3.1
-/*Unitary matrices are particulary usefull because they  have many generic properties. 
-ex: "matrix has an entire row of ...(number), it's a diagonal matrix,  ecc..."*/
 
-//with positive values:
+//Unitary matrices:
+/*Unitary matrices are particulary usefull 
+because they  have many generic properties. 
+ex: "matrix has an entire row of ...(number),
+it's a diagonal matrix,  ecc..."*/
+
+//3.1-with positive values:
 TEST(MatrixMultiplicationTest, TestUnitaryMatrices_positive){
-    /*Test with unitary matrices*/
+    //Test with unitary matrices
     std::vector<std::vector<int>> A1(1,std::vector<int>(1, 0));
     std::vector<std::vector<int>> B1(1,std::vector<int>(1, 0));
     std::vector<std::vector<int>> C1(1,std::vector<int>(1, 0));
@@ -185,10 +191,9 @@ TEST(MatrixMultiplicationTest, TestUnitaryMatrices_positive){
     }
 }
 
-//3.2
-//with negative values:
+//3.2-with negative values:
 TEST(MatrixMultiplicationTest, TestUnitaryMatrices_negative){
-    /*Test with unitary matrices*/
+    //Test with unitary matrices
     std::vector<std::vector<int>> A1(1,std::vector<int>(1, 0));
     std::vector<std::vector<int>> B1(1,std::vector<int>(1, 0));
     std::vector<std::vector<int>> C1(1,std::vector<int>(1, 0));
@@ -203,10 +208,8 @@ TEST(MatrixMultiplicationTest, TestUnitaryMatrices_negative){
     }
 }
 
-
-
-// 3.3
-// test for homogeneous matrices:
+ 
+//3.3-test for homogeneous matrices:
 TEST(MatrixMultiplicationTest, TestHomogeneousMatrices){
     std::vector<std::vector<int>> A(2,std::vector<int>(2, 0));
     std::vector<std::vector<int>> B(2,std::vector<int>(2, 0));
@@ -223,12 +226,13 @@ TEST(MatrixMultiplicationTest, TestHomogeneousMatrices){
     }
 }
 
-//3.4
-//test with bigger numbers: 
+//3.4-test with bigger numbers: 
 TEST(MatrixMultiplicationTest, TestOutputMatrices){
-    /*Test to see valid inputs: try to see if inputs in a range
-      between 0 and 10000 give errors. We don't try negative numbers
-      since we already saw that they generate a problem.*/
+    //Test to see valid inputs: try to see if higher inputs; in a range
+    //between 0 and 10000 give errors. We don't try negative numbers
+    //since we already saw that they generate a problem.
+    //in this particular case we exploit a metamorfic relation,
+    //so we multiplie the matrix  for the identity
     std::vector<std::vector<int>> A(100,std::vector<int>(100, 0));
     std::vector<std::vector<int>> B(100,std::vector<int>(100, 0));
     std::vector<std::vector<int>> C(100,std::vector<int>(100, 0));
@@ -236,7 +240,7 @@ TEST(MatrixMultiplicationTest, TestOutputMatrices){
 
     for(int i=0; i < 100 ; i++){
         A[i][i]=1;     
-        for(int j=0;j<10;j++){
+        for(int j=0;j<100;j++){
             B[i][j] = count;
             count++;
         }
@@ -247,12 +251,14 @@ TEST(MatrixMultiplicationTest, TestOutputMatrices){
 
 
 //4-INVALID INPUTS TEST
-/*we made some tests about possible invalid inputs such as  dimensional incompatibilities between A and B:
-This test does segmentation fault, so must be decommented only when necessary*/
+/*we made some tests about possible invalid inputs 
+such as  dimensional incompatibilities between A and B:
+In this test occurs segmentation fault,
+ so must be decommented only when necessary*/
 
 /*TEST(MatrixMultiplicationTest, TestInvalidInputs){
     /* Test for invalid dimensions: it should give an error for 
-       non-matching dimensions instead it does segmentation fault.*/
+       non-matching dimensions instead it goes into segmentation fault.*/
     /*std::vector<std::vector<int>> A(4,std::vector<int>(4, 0));
     std::vector<std::vector<int>> B(2,std::vector<int>(4, 0));
     std::vector<std::vector<int>> C(4,std::vector<int>(4, 0));
@@ -271,21 +277,35 @@ This test does segmentation fault, so must be decommented only when necessary*/
 
 //5-ERROR 17
 
-/*Now we have one last error (error No. 17: "Result matrix C contains the number 17!") that we've seen during the random test,
-but we can't reproduce it with a specific test.
-In fact, if we try to create a test case to have a 17 in the C matrix, we encounter other errors but not error 17.
+/*Now we have one last error 
+(error N. 17: "Result matrix C contains the number 17!")
+that we've found during the random tests,
+but it was particulary difficult to obtain it with a specific test.
+In fact, if we try to create a test case to have a 17 in the C matrix,
+we encounter other errors but not error 17.
 This is probably because some errors can modify the output matrix. 
-In this particular case, if we want to get error 17, we necessarily have to go through error 7: "Result matrix contains a number between 11 and 20."
-After the modification of the result matrix, we no longer have a 17 in the C matrix.
 
-After some attempts, we probably understand how error 7 impacts the C matrix, and so we managed to create a specific test for error 17. 
-Basically, if i have the number 13 in the C matrix, I get error 7, and this error adds 4 to my entry so that I obtain a 17 in the output matrix and finally get error 17
-However, if we try to run this test in a for loop, we see that sometimes I just get error 7 without error 17, so we don't know if maybe it's not deterministic or if we don't understand the pattern.
-*/
+Indeed, some errors can modify the output matrix,
+so in this particular case, if we want to get error 17,
+we necessarily have to go through error 7: 
+"Result matrix contains a number between 11 and 20."
+After the modification of the result matrix,
+there no longer is a 17 in the C matrix.
 
-//error n° 17 is probably not deterministic(?) 
+After some attempts, we understand how error 7 impacts on the C matrix,
+and so we managed to create a specific test for error 17. 
+Basically, if i have the number 13 in the C matrix, I get error 7,
+and this error adds 4 to my entry,
+so that I obtain a 17 in the output matrix and finally get error 17.
+However, if we try to run this test in a for loop,
+we see that sometimes I just get error 7 without error 17,
+so we don't know if maybe it's not a deterministic 
+or if we don't understand the pattern.*/
+
+//error n° 17 is not deterministic(?) 
 TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
-    for(int i =0; i< 1; i++){
+    //we want to 
+    for(int i =0; i < 10; i++){ 
     std::vector<std::vector<int>> expected(7,std::vector<int>(2, 0));
     std::vector<std::vector<int>> A = {
         {1, 0, 0, 0, 0, 0, 0, 0},
@@ -299,7 +319,7 @@ TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
     std::vector<std::vector<int>> B = {
         {13, 13},
         {13, 13},
-        {12, 13},
+        {13, 13},
         {13, 13},
         {13, 13},
         {13, 13},
@@ -308,16 +328,8 @@ TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
         
     };
     std::vector<std::vector<int>> C(7, std::vector<int>(2, 0));
-
-    multiplyMatrices(A, B, C, 7, 7, 2);
-
-    /*std::vector<std::vector<int>> expected = {
-        {58, 64},
-        {139, 154}
-    };*/
-
-    multiplyMatricesWithoutErrors(A, B, expected, 7,7,2);
-
+    multiplyMatrices(A, B, C, 7, 8, 2);
+    multiplyMatricesWithoutErrors(A, B, expected, 7,8,2);
     EXPECT_EQ(C, expected) << "Matrix multiplication test failed! :(((()";
     }
 }
