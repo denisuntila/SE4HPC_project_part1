@@ -56,7 +56,7 @@ or to the values within the three matrices.
 So all next tests will consider these issues. 
 */
 
-//--------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------
 
 //2-TEST ABOUT SIZE'S ERRORS:
 //2.1 test with rectangular matrices
@@ -163,8 +163,7 @@ TEST(MatrixMultiplicationTest, TestMaxDimensionsMatrices){
     EXPECT_EQ(C, A) << "Matrix multiplication test failed! :(((()";
 }
 
-
-
+//------------------------------------------------------------------------------------
 
 //3-TEST ABOUT VALUES ERRORS:
 
@@ -249,6 +248,7 @@ TEST(MatrixMultiplicationTest, TestOutputMatrices){
     EXPECT_EQ(C, B) << "Matrix multiplication test failed! :(((()";
 }
 
+//------------------------------------------------------------------------------------
 
 //4-INVALID INPUTS TEST
 /*we made some tests about possible invalid inputs 
@@ -274,6 +274,7 @@ so must be decommented only when necessary*/
 
 }*/
 
+//------------------------------------------------------------------------------------
 
 //5-ERROR 17
 
